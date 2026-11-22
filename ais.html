@@ -95,12 +95,13 @@ L.geoJSON({type:'Feature',geometry:LAND},{pane:'landPane',interactive:false,styl
 // 2) Online-Kartenkacheln darüber – mit automatischem Wechsel, falls ein Anbieter blockiert ist.
 const OSM_ATTR='© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>';
 const TILE_PROVIDERS=[
+ // Standard: OpenStreetMap (funktioniert auf GitHub Pages; lokal geöffnet blockiert OSM, dann greift automatisch der nächste Anbieter)
+ {name:'OpenStreetMap',url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',opts:{maxZoom:19,referrerPolicy:'strict-origin-when-cross-origin',attribution:OSM_ATTR}},
  // Hinweis: CARTO-Kacheln verlangen inzwischen einen eigenen Schlüssel (sonst Wasserzeichen) – daher nicht mehr enthalten.
  {name:'Esri Dunkelgrau',url:'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',overlay:'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',opts:{maxZoom:16,attribution:'© Esri, HERE, Garmin, '+OSM_ATTR}},
  {name:'Esri Ocean',url:'https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}',opts:{maxZoom:13,attribution:'© Esri, GEBCO, NOAA'}},
  {name:'Esri Straßenkarte',url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',opts:{maxZoom:19,attribution:'© Esri'}},
  {name:'OSM Deutschland',url:'https://tile.openstreetmap.de/{z}/{x}/{y}.png',opts:{maxZoom:19,attribution:OSM_ATTR}},
- {name:'OpenStreetMap',url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',opts:{maxZoom:19,attribution:OSM_ATTR}},
  {name:'Nur Offline-Küstenlinie',url:null}
 ];
 let tileOverlay=null,tileLayer=null,tileIdx=0,tileLoads=0,tileErrors=0,tileTimer=null,tileManual=false;
@@ -117,7 +118,7 @@ function useTiles(i,manual=false){
  tileLayer.on('tileerror',()=>{tileErrors++;if(tileErrors>=3&&tileLoads===0)next('Fehler')});
  tileTimer=setTimeout(()=>{if(tileLoads===0)next(tileManual?'':'Zeitüberschreitung');if(tileManual&&tileLoads===0)tileTag('Karte: '+p.name+' · nicht erreichbar')},7000);
 }
-useTiles(0);
+useTiles(location.protocol==='file:'?1:0); // lokal geöffnet: OSM würde blockieren, daher direkt den nächsten Anbieter
 L.control.zoom({position:'bottomright'}).addTo(map);
 // Hafeneinfahrt Marina Großenbroder Fähre (ADAC-Hafenführer: 54°23,64' N 11°07,03' E) und 2-sm-Warnzone
 const HARBOR={lat:54.3940,lon:11.11717,name:'Hafeneinfahrt Marina Großenbroder Fähre'},ALERT_NM=2;
