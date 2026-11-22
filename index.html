@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071522">
+<title>Wetterlage · Großenbrode · Schwarzenau · Hemdingen</title>
+<style>
+:root{--bg:#071522;--panel:#0d2030;--panel2:#10283a;--line:#1d3b50;--muted:#8fa9bb;--text:#edf6fb;--cyan:#51d4e5;--green:#39d6a0;--yellow:#f4d35e;--orange:#ff9a3c;--red:#ff5c66;--violet:#c070ff;--blue:#6ca9ff}
+*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:#8dcde0}button{font:inherit;cursor:pointer;color:var(--text);background:#173449;border:1px solid #2b4e65;border-radius:9px;padding:7px 11px;transition:.15s}button:hover{background:#20465e;border-color:#4a7893}button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.topbar{position:sticky;top:0;z-index:50;min-height:66px;display:flex;align-items:center;justify-content:space-between;padding:10px 22px;border-bottom:1px solid var(--line);background:#091a29f2;backdrop-filter:blur(10px);gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.brandmark{width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#164e66,#0d2c42);display:grid;place-items:center;border:1px solid #28627b;font-size:20px}.brand h1{font-size:17px;line-height:1.2;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.topright{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pill{display:flex;align-items:center;gap:8px;padding:6px 11px;border:1px solid #245642;background:#0c2b28;border-radius:30px;color:#9cf0ce;font-size:12px;font-weight:650}.pill.warn{border-color:#6b4a1d;background:#2b200c;color:#ffd08f}.dot{width:7px;height:7px;background:var(--green);border-radius:50%}.pill.warn .dot{background:var(--orange)}.clock{font-variant-numeric:tabular-nums;color:#b9cbd7;font-size:12px}
+main{max-width:1500px;margin:0 auto;padding:16px 18px 30px}
+h2.sec{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#dce9f0;margin:6px 2px 10px;display:flex;justify-content:space-between;align-items:baseline}h2.sec small{font-size:11px;text-transform:none;letter-spacing:0;color:var(--muted);font-weight:450}
+/* Warnungen */
+#warnings{margin-bottom:18px}.wlist{display:flex;flex-direction:column;gap:8px}
+.warn{border:1px solid var(--line);border-left:5px solid var(--yellow);background:var(--panel);border-radius:11px;overflow:hidden}.warn.moderate{border-left-color:var(--orange)}.warn.severe{border-left-color:var(--red)}.warn.extreme{border-left-color:var(--violet)}
+.whead{display:flex;gap:12px;align-items:center;padding:11px 14px;cursor:pointer}.wico{font-size:22px;flex:none}.wtxt{flex:1;min-width:0}.wtitle{font-weight:650;font-size:13.5px}.wmeta{color:var(--muted);font-size:11.5px;margin-top:2px}.wplaces{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.tag{font-size:10.5px;padding:2px 8px;border-radius:20px;background:#17354a;border:1px solid #2b4e65;white-space:nowrap}.sev{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;color:#071522;background:var(--yellow);white-space:nowrap}.sev.moderate{background:var(--orange)}.sev.severe{background:var(--red);color:#fff}.sev.extreme{background:var(--violet);color:#fff}
+.wbody{display:none;padding:0 14px 13px 48px;color:#cfdde6;font-size:13px;white-space:pre-line}.warn.open .wbody{display:block}.wbody b{color:#fff}
+.okbox{border:1px solid #245642;background:#0c2b28;color:#9cf0ce;border-radius:11px;padding:12px 14px;font-size:13px}
+/* Orte */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}
+.card{background:#091a29;border:1px solid var(--line);border-radius:15px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.chead{padding:14px 16px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.chead h3{margin:0;font-size:16px}.chead p{margin:2px 0 0;color:var(--muted);font-size:11.5px}.cwarn{font-size:11px;padding:3px 9px;border-radius:20px;white-space:nowrap;border:1px solid #245642;background:#0c2b28;color:#9cf0ce}.cwarn.on{border-color:#6b4a1d;background:#2b200c;color:#ffd08f}
+.now{display:flex;gap:14px;align-items:center;padding:14px 16px 6px}.bigico{font-size:52px;line-height:1}.bigtemp{font-size:40px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}.cond{color:#cfdde6;font-size:13px;margin-top:4px}.feels{color:var(--muted);font-size:12px}
+.datums{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:8px 14px}.datum{background:var(--panel2);border-radius:9px;padding:7px 9px;min-width:0}.datum span{display:block;color:var(--muted);font-size:10.5px}.datum b{font-size:13px;font-variant-numeric:tabular-nums}.arrow{display:inline-block;vertical-align:-1px;color:var(--cyan)}
+.station{margin:2px 14px 8px;padding:8px 10px;border:1px dashed #2b4e65;border-radius:9px;font-size:11.5px;color:#b9cbd7}.station b{color:#fff}
+.models{display:flex;gap:5px;padding:4px 14px 8px;flex-wrap:wrap;align-items:center}.models span{color:var(--muted);font-size:11px;margin-right:3px}.models button{padding:4px 9px;font-size:11px;border-radius:20px}.models button.on{background:#1d4d63;border-color:var(--cyan);color:#fff}.models button:disabled{opacity:.35;cursor:not-allowed}
+.sub{padding:8px 16px 4px;color:#dce9f0;font-size:11px;font-weight:650;letter-spacing:.05em;text-transform:uppercase;border-top:1px solid var(--line);margin-top:6px}
+.chart{padding:0 8px}.chart svg{width:100%;height:150px;display:block}
+.hours{display:flex;overflow-x:auto;gap:4px;padding:6px 12px 10px;scrollbar-width:thin}.hr{flex:none;width:54px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:6px 2px;font-size:11px}.hr .t{color:var(--muted)}.hr .i{font-size:19px;margin:2px 0}.hr .tp{font-weight:700;font-size:13px}.hr .p{color:var(--blue);font-size:10.5px}.hr .w{font-size:10.5px;margin-top:2px}
+.days{padding:4px 12px 12px}.day{display:grid;grid-template-columns:62px 26px 1fr 66px 74px;gap:8px;align-items:center;padding:6px 4px;border-bottom:1px solid #132c3d;font-size:12px}.day:last-child{border-bottom:0}.day .dn{font-weight:650}.day .di{font-size:18px;text-align:center}.range{position:relative;height:6px;background:#132c3d;border-radius:4px}.range i{position:absolute;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,#6ca9ff,#f4bd62)}.rv{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums;font-size:11px;color:#cfdde6;margin-bottom:3px}.day .dp{color:var(--blue);font-size:11px;text-align:right}.day .dw{font-size:11px;text-align:right;color:#cfdde6}
+/* Wassersport */
+.marine{margin:4px 12px 12px;background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:hidden}.mtop{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px}.wtable{overflow-x:auto;padding:0 10px 10px}.wtable table{border-collapse:separate;border-spacing:2px;font-size:11px;font-variant-numeric:tabular-nums}.wtable th{color:var(--muted);font-weight:500;text-align:left;padding:2px 6px;white-space:nowrap;position:sticky;left:0;background:var(--panel)}.wtable td{text-align:center;padding:4px 3px;border-radius:5px;min-width:32px;color:#071522;font-weight:650}.wtable td.h{color:var(--muted);background:none;font-weight:500}.wtable td.d{background:none;color:var(--cyan);font-weight:400}
+.links{display:flex;flex-wrap:wrap;gap:6px;padding:0 10px 10px}.links a{font-size:11.5px;text-decoration:none;padding:5px 10px;border:1px solid #2b4e65;border-radius:20px;background:#102a3b;color:#cfe6f0}.links a:hover{border-color:#4a7893}
+.err{color:#ffb3b8;font-size:12px;padding:10px 16px}.loading{color:var(--muted);padding:30px 16px;text-align:center;font-size:13px}
+footer{max-width:1500px;margin:0 auto;padding:6px 18px 30px;color:#8299a9;font-size:11px;line-height:1.6}.srcs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}.src{padding:3px 9px;border-radius:20px;border:1px solid var(--line);font-size:10.5px}.src.ok{border-color:#245642;color:#9cf0ce}.src.bad{border-color:#6b2a2f;color:#ffb3b8}
+.floodcard{background:#091a29;border:1px solid var(--line);border-radius:15px;padding:0 16px 14px;margin-bottom:18px}.fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}.fbox{min-width:0}.fhead b{font-size:13.5px;display:block}.fhead small{color:var(--muted);font-size:11px}.gauges{display:flex;flex-direction:column;gap:7px;margin-top:7px}.gauge{background:var(--panel);border:1px solid var(--line);border-left:5px solid #2b4e65;border-radius:10px;padding:8px 11px}.gtop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.gname{font-weight:650;font-size:12.5px}.gwater{color:var(--muted);font-size:10.5px}.gbadge{color:#071522;font-weight:700;font-size:10.5px;padding:2px 8px;border-radius:20px;white-space:nowrap}.glvl{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:4px}.glvl small{font-size:10.5px;font-weight:400;color:var(--muted)}.gtrend{font-size:11.5px;color:#cfdde6;margin-bottom:3px}.gfoot{font-size:10.5px;color:var(--muted)}
+.ninabox{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;padding:10px 14px;border:1px solid #2b4e65;border-radius:11px;background:#0d2333}.nico{font-size:26px}.ntxt{flex:1;min-width:220px}.ntxt b{display:block;font-size:13px}.ntxt small{color:var(--muted);font-size:11.5px}
+@media(max-width:1000px){.fgrid{grid-template-columns:1fr}}
+.sportcard{background:#091a29;border:1px solid var(--line);border-radius:15px;padding:0 16px 14px;margin-bottom:18px}.shead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;padding:14px 0 10px;border-bottom:1px solid var(--line)}.shead h3{margin:0;font-size:16px}.shead p{margin:2px 0 0;color:var(--muted);font-size:11.5px}.tabs{display:flex;gap:5px}.tabs button{padding:5px 11px;font-size:12px;border-radius:20px}.tabs button.on{background:#1d4d63;border-color:var(--cyan)}
+.sbanner{margin-top:10px;padding:9px 12px;border-radius:9px;background:#2b200c;border:1px solid #6b4a1d;color:#ffd08f;font-size:12.5px}
+.hero{display:flex;gap:14px;align-items:center;padding:14px 4px 6px}.hico{font-size:46px}.htitle{font-size:20px;font-weight:700}.hsub{color:#cfdde6;font-size:13px;margin-top:3px}
+.acts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px}.act{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 12px}.atop{display:flex;gap:9px;align-items:center}.atop b{display:block;font-size:14px}.atop small{color:var(--muted);font-size:11px}.aico{font-size:26px}.vbadge{margin-left:auto;color:#071522;font-weight:700;font-size:11px;padding:3px 9px;border-radius:20px;white-space:nowrap}.bar{height:6px;background:#132c3d;border-radius:4px;margin:10px 0 8px;overflow:hidden}.bar i{display:block;height:100%;border-radius:4px}.adesc{font-size:12.5px;color:#e3eef4}.ameta{font-size:11.5px;color:var(--muted);margin-top:5px}.ameta b{color:#cfdde6}
+.spots{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}.spot{display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:8px 10px}.spot.best{border-color:#39d6a0;box-shadow:0 0 0 1px #39d6a055}.stxt{flex:1;min-width:0}.sname{font-weight:650;font-size:13px}.fit{font-size:11px;font-weight:600;margin-left:4px}.slvl{color:var(--cyan);font-size:11px}.sinfo{color:#b9cbd7;font-size:11.5px;margin-top:2px}.swf{font-size:11px;text-decoration:none;white-space:nowrap;padding:4px 8px;border:1px solid #2b4e65;border-radius:20px;background:#102a3b;color:#cfe6f0}
+.tl{display:flex;gap:3px;overflow-x:auto;padding:10px 0 4px}.tlh{flex:1 0 38px;text-align:center}.tlc{height:34px;border-radius:7px;display:grid;place-items:center;font-size:17px}.tlt{font-size:10.5px;color:#cfdde6;margin-top:3px}.tlw{font-size:10px;color:var(--muted)}
+.plan{display:flex;flex-direction:column;gap:6px;margin-top:8px}.pblock{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-left:5px solid;border-radius:10px;padding:8px 12px}.ptime{font-variant-numeric:tabular-nums;font-weight:700;font-size:13px;min-width:92px}.pico{font-size:24px}.ptxt{flex:1;min-width:0}.ptxt b{font-size:13.5px}.prio{margin-left:8px;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;background:#1d4d63;color:#cfeff6}.pwhy{font-size:12px;color:#e3eef4}.pdat{font-size:11px;color:var(--muted)}
+.snote{color:var(--muted);font-size:11px;margin-top:10px;line-height:1.5}
+@media(max-width:1200px){.acts{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.ptime{min-width:76px;font-size:12px}.acts{grid-template-columns:1fr}.spots{grid-template-columns:1fr}.hico{font-size:36px}.htitle{font-size:17px}}
+@media(max-width:1200px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:780px){.grid{grid-template-columns:1fr}.topbar{padding:8px 12px}.brand h1{font-size:14px}main{padding:12px 10px}.wbody{padding-left:14px}.wplaces{display:none}.day{grid-template-columns:52px 24px 1fr 56px 64px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+ <div class="brand"><div class="brandmark">⛅</div><div><h1>Wetterlage · Großenbrode · Schwarzenau · Hemdingen</h1><p>DWD · DMI · NINA · ECMWF · Open-Meteo</p></div></div>
+ <div class="topright"><div class="pill" id="wpill"><i class="dot"></i><span id="wpilltxt">Lade Warnungen …</span></div><span class="clock" id="updated">–</span><button id="refresh" title="Jetzt aktualisieren">⟳ Aktualisieren</button></div>
+</header>
+<main>
+ <section id="warnings"><h2 class="sec">Aktive Warnungen <small id="wsrc">DWD (Gemeinde) · NINA/BBK (Kreis)</small></h2><div class="wlist" id="wlist"><div class="loading">Warnungen werden geladen …</div></div></section>
+ <h2 class="sec">Wetter &amp; Vorhersage <small>Aktualisiert sich alle 10 Minuten</small></h2>
+ <section class="grid" id="grid"></section>
+ <section id="sport" class="sportcard"><div class="shead"><div><h3>🌊 Wassersport-Check · Großenbroder Fähre</h3><p>Segeln, Windsurfen, Jetski oder Wasserski? Empfehlung aus Wind, Böen, Wellen und Gewitterrisiko</p></div><div class="tabs" id="sporttabs"><button data-d="0" class="on">Heute</button><button data-d="1">Morgen</button><button data-d="2">Übermorgen</button></div></div><div id="sportbody"><div class="loading">Wind- und Wellendaten werden ausgewertet …</div></div></section>
+ <section id="flood" class="floodcard"><div class="shead"><div><h3>🌊 Hochwasser &amp; Wasserstände</h3><p>Live-Pegel der Wasserstraßen- und Schifffahrtsverwaltung des Bundes · Sturmflut-Einstufung Ostsee nach BSH</p></div><div class="links" style="padding:0"><a href="https://www.hochwasserzentralen.de/" target="_blank" rel="noopener">Länderübergreifendes Hochwasserportal ↗</a></div></div>
+  <div class="fgrid"><div id="fl-gb" class="fbox"><div class="loading">Lade Pegel …</div></div><div id="fl-sw" class="fbox"><div class="loading">Lade Pegel …</div></div><div id="fl-hd" class="fbox"><div class="loading">Lade Pegel …</div></div></div>
+  <div class="snote">Ostsee: ab 1,00 m über NHN leichte, ab 1,25 m mittlere, ab 1,50 m schwere, ab 2,00 m sehr schwere Sturmflut. Flusspegel: Einstufung nach mittlerem Niedrig-/Hochwasser (MNW/MHW) der WSV. Amtliche Hochwasserwarnungen der Länder siehe Hochwasserportal.</div></section>
+</main>
+<footer>
+ <div class="srcs" id="srcs"></div>
+ Daten: Deutscher Wetterdienst (Warnungen &amp; Stationsmessungen über <a href="https://brightsky.dev" target="_blank" rel="noopener">Bright Sky</a>), Warnungen des Bundesamts für Bevölkerungsschutz (NINA), Vorhersagemodelle DWD ICON, DMI HARMONIE und ECMWF über <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Windfinder bietet keine offene Schnittstelle – dafür gibt es direkte Links.
+ Alle Angaben ohne Gewähr. Bei Unwetter gelten die amtlichen Warnungen von DWD und NINA.
+</footer>
+<script>
+(()=>{
+'use strict';
+const PLACES=[
+ {id:'gb',name:'Großenbrode',region:'Ostsee · Kreis Ostholstein',lat:54.364,lon:11.084,ars:'010550000000',marine:{lat:54.37,lon:11.14},
+  links:[['Windfinder Marina Großenbrode','https://www.windfinder.com/forecast/marina_grossenbrode'],['DMI Vorhersage','https://www.dmi.dk/'],['BSH Wasserstand Ostsee','https://www.bsh.de/'],['DWD Seewetter','https://www.dwd.de/DE/leistungen/seewetterbericht/seewetterbericht.html']]},
+ {id:'sw',name:'Schwarzenau',region:'Bad Berleburg · Kreis Siegen-Wittgenstein',lat:51.008,lon:8.452,ars:'059700000000',
+  links:[['Hochwasser NRW','https://www.hochwasserportal.nrw.de/'],['Länderübergreifendes Hochwasserportal','https://www.hochwasserzentralen.de/'],['DWD Warnungen NRW','https://www.dwd.de/DE/wetter/warnungen_gemeinden/warnWetter_node.html']]},
+ {id:'hd',name:'Hemdingen',region:'Kreis Pinneberg',lat:53.765,lon:9.839,ars:'010560000000',
+  links:[['DWD Warnungen SH','https://www.dwd.de/DE/wetter/warnungen_gemeinden/warnWetter_node.html']]}
+];
+const MODELS=[['icon_seamless','DWD ICON'],['dmi_seamless','DMI HARMONIE'],['ecmwf_ifs025','ECMWF']];
+const TZ='Europe/Berlin';
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtT=(ts,o)=>new Intl.DateTimeFormat('de-DE',{timeZone:TZ,...o}).format(ts);
+const src={};function srcState(k,ok){src[k]=ok;$('srcs').innerHTML=Object.entries(src).map(([k,v])=>`<span class="src ${v?'ok':'bad'}">${v?'✓':'✗'} ${esc(k)}</span>`).join('')}
+async function getJSON(url,ms=15000){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);try{const r=await fetch(url,{signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}finally{clearTimeout(t)}}
+async function firstOk(urls){let e;for(const u of urls){try{return await getJSON(u)}catch(x){e=x}}throw e}
+
+// ---------- Hilfen ----------
+const WMO={0:['Klar','☀️','🌙'],1:['Überwiegend klar','🌤️','🌙'],2:['Teilweise bewölkt','⛅','☁️'],3:['Bedeckt','☁️','☁️'],45:['Nebel','🌫️'],48:['Nebel mit Reif','🌫️'],51:['Leichter Niesel','🌦️'],53:['Niesel','🌦️'],55:['Starker Niesel','🌧️'],56:['Gefrierender Niesel','🌧️'],57:['Starker gefrierender Niesel','🌧️'],61:['Leichter Regen','🌦️'],63:['Regen','🌧️'],65:['Starker Regen','🌧️'],66:['Gefrierender Regen','🧊'],67:['Starker gefrierender Regen','🧊'],71:['Leichter Schneefall','🌨️'],73:['Schneefall','🌨️'],75:['Starker Schneefall','❄️'],77:['Schneegriesel','🌨️'],80:['Leichte Schauer','🌦️'],81:['Schauer','🌧️'],82:['Heftige Schauer','⛈️'],85:['Schneeschauer','🌨️'],86:['Starke Schneeschauer','❄️'],95:['Gewitter','⛈️'],96:['Gewitter mit Hagel','⛈️'],99:['Schweres Gewitter mit Hagel','⛈️']};
+const wtxt=c=>(WMO[c]||['–'])[0];const wico=(c,day=1)=>{const w=WMO[c];if(!w)return'❔';return(!day&&w[2])?w[2]:w[1]};
+const DIRS=['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'];const dirName=d=>d==null?'–':DIRS[Math.round(d/22.5)%16];
+const arrow=d=>d==null?'':`<svg class="arrow" width="11" height="11" viewBox="0 0 12 12" style="transform:rotate(${d+180}deg)" aria-label="aus ${dirName(d)}"><path d="M6 0.5 L10.5 11 L6 8.3 L1.5 11Z" fill="currentColor"/></svg>`;
+const hh=ts=>String(+new Intl.DateTimeFormat('de-DE',{timeZone:TZ,hour:'numeric',hourCycle:'h23'}).formatToParts(ts).find(x=>x.type==='hour').value).padStart(2,'0'); // zeigt, wohin der Wind weht
+const BFT=[1,6,12,20,29,39,50,62,75,89,103,118];const bft=kmh=>kmh==null?null:BFT.findIndex(v=>kmh<v)<0?12:BFT.findIndex(v=>kmh<v);
+const kn=kmh=>kmh==null?null:kmh/1.852;
+function windColor(k){const s=[[0,'#9ad7ff'],[5,'#6fe0d2'],[10,'#7ee36d'],[15,'#e9e34f'],[20,'#ffb340'],[25,'#ff6a4d'],[30,'#ff4f9a'],[40,'#c070ff']];let c=s[0][1];for(const [v,col] of s)if(k>=v)c=col;return c}
+const r0=v=>v==null||isNaN(v)?'–':Math.round(v);const r1=v=>v==null||isNaN(v)?'–':(Math.round(v*10)/10).toLocaleString('de-DE');
+const pick=(o,k,m)=>o?(o[k+'_'+m]??o[k]):undefined;
+
+// ---------- Karten-Gerüst ----------
+const state={};
+$('grid').innerHTML=PLACES.map(p=>`<article class="card" id="card-${p.id}"><div class="chead"><div><h3>${esc(p.name)}</h3><p>${esc(p.region)}</p></div><span class="cwarn" id="cw-${p.id}">…</span></div><div id="body-${p.id}"><div class="loading">Lade Wetterdaten …</div></div></article>`).join('');
+
+// ---------- Vorhersage ----------
+async function loadForecast(p){
+ const base=`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&timezone=${encodeURIComponent(TZ)}&timeformat=unixtime`;
+ const cur=getJSON(base+'&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,is_day&daily=sunrise,sunset&forecast_days=1');
+ const H='temperature_2m,precipitation_probability,precipitation,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,is_day';
+ const D='weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant';
+ const tries=[MODELS.map(m=>m[0]),['icon_seamless','dmi_seamless'],['icon_seamless'],null];
+ let fc=null,models=[];
+ for(const t of tries){try{fc=await getJSON(base+`&hourly=${H}&daily=${D}&forecast_days=7`+(t?'&models='+t.join(','):''));models=t||['best_match'];break}catch(e){}}
+ if(!fc)throw new Error('Vorhersage nicht erreichbar');
+ // Modelle ohne Daten (z. B. außerhalb des DMI-Gebiets) aussortieren
+ const avail=models.filter(m=>m==='best_match'||(fc.hourly['temperature_2m_'+m]||fc.hourly.temperature_2m||[]).some(v=>v!=null));
+ return {cur:await cur.catch(()=>null),fc,models:avail};
+}
+async function loadStation(p){const d=await getJSON(`https://api.brightsky.dev/current_weather?lat=${p.lat}&lon=${p.lon}&tz=${encodeURIComponent(TZ)}`);return d}
+async function loadMarine(p){return getJSON(`https://marine-api.open-meteo.com/v1/marine?latitude=${p.marine.lat}&longitude=${p.marine.lon}&timezone=${encodeURIComponent(TZ)}&timeformat=unixtime&current=wave_height,wave_direction,wave_period,sea_surface_temperature&hourly=wave_height&forecast_days=2`)}
+
+function renderCard(p){
+ const st=state[p.id];if(!st)return;const {cur,fc,models}=st.data,model=st.model;
+ const c=cur?.current,h=fc.hourly,d=fc.daily,now=Date.now()/1000;
+ const g=(o,k)=>pick(o,k,model);
+ // Stundenindex ab jetzt
+ let i0=h.time.findIndex(t=>t>=now-1800);if(i0<0)i0=0;
+ // Aktuell: bevorzugt "current", sonst erste Modellstunde
+ const cc=c?{t:c.temperature_2m,fe:c.apparent_temperature,rh:c.relative_humidity_2m,pr:c.precipitation,code:c.weather_code,cl:c.cloud_cover,p:c.pressure_msl,ws:c.wind_speed_10m,wd:c.wind_direction_10m,wg:c.wind_gusts_10m,day:c.is_day}
+  :{t:g(h,'temperature_2m')[i0],code:g(h,'weather_code')[i0],ws:g(h,'wind_speed_10m')[i0],wd:g(h,'wind_direction_10m')[i0],wg:g(h,'wind_gusts_10m')[i0],pr:g(h,'precipitation')[i0],day:g(h,'is_day')?.[i0]??1};
+ const sr=cur?.daily?.sunrise?.[0],ss=cur?.daily?.sunset?.[0];
+ let html=`<div class="now"><div class="bigico">${wico(cc.code,cc.day)}</div><div><div class="bigtemp">${r1(cc.t)}°</div><div class="cond">${esc(wtxt(cc.code))}</div><div class="feels">${cc.fe!=null?'gefühlt '+r0(cc.fe)+'°':''}${sr?` · ☀ ${fmtT(sr*1000,{hour:'2-digit',minute:'2-digit'})}–${fmtT(ss*1000,{hour:'2-digit',minute:'2-digit'})}`:''}</div></div></div>
+ <div class="datums">
+  <div class="datum"><span>Wind</span><b>${arrow(cc.wd)} ${r0(cc.ws)} km/h</b></div>
+  <div class="datum"><span>Wind (kn · Bft)</span><b>${r0(kn(cc.ws))} kn · ${bft(cc.ws)??'–'} Bft</b></div>
+  <div class="datum"><span>Böen · Richtung</span><b>${r0(cc.wg)} km/h · ${dirName(cc.wd)}</b></div>
+  <div class="datum"><span>Niederschlag</span><b>${r1(cc.pr)} mm</b></div>
+  <div class="datum"><span>Luftfeuchte</span><b>${cc.rh!=null?r0(cc.rh)+' %':'–'}</b></div>
+  <div class="datum"><span>Luftdruck</span><b>${cc.p!=null?r0(cc.p)+' hPa':'–'}</b></div>
+ </div>`;
+ const sw=st.station?.weather,ss0=st.station?.sources?.[0];
+ if(sw)html+=`<div class="station">📍 DWD-Messstation <b>${esc(ss0?.station_name||'–')}</b>${ss0?.distance!=null?' ('+r1(ss0.distance/1000)+' km)':''}: <b>${r1(sw.temperature)}°C</b>, Wind ${r0(sw.wind_speed_10)} km/h ${dirName(sw.wind_direction_10)}${sw.wind_gust_speed_10!=null?', Böen '+r0(sw.wind_gust_speed_10)+' km/h':''}${sw.timestamp?' · '+fmtT(new Date(sw.timestamp),{hour:'2-digit',minute:'2-digit'})+' Uhr':''}</div>`;
+ html+=`<div class="models"><span>Vorhersagemodell:</span>${MODELS.map(([m,l])=>`<button data-m="${m}" class="${m===model?'on':''}" ${models.includes(m)?'':'disabled title="Für diesen Ort nicht verfügbar"'}>${l}</button>`).join('')}${models.includes('best_match')?'<button class="on">Automatisch</button>':''}</div>`;
+ // 48-h-Diagramm
+ html+=`<div class="sub">Nächste 48 Stunden</div><div class="chart">${chart(h,i0,g)}</div>`;
+ // Stundenleiste
+ html+=`<div class="hours">`;for(let i=i0;i<Math.min(i0+24,h.time.length);i++){const ws=g(h,'wind_speed_10m')[i];html+=`<div class="hr"><div class="t">${hh(h.time[i]*1000)}:00</div><div class="i">${wico(g(h,'weather_code')[i],g(h,'is_day')?.[i]??1)}</div><div class="tp">${r0(g(h,'temperature_2m')[i])}°</div><div class="p">${(g(h,'precipitation')[i]||0)>0?r1(g(h,'precipitation')[i])+' mm':(g(h,'precipitation_probability')?.[i]!=null?r0(g(h,'precipitation_probability')[i])+' %':'&nbsp;')}</div><div class="w">${arrow(g(h,'wind_direction_10m')[i])} ${r0(ws)}</div></div>`}html+=`</div>`;
+ // 7 Tage
+ const tmin=Math.min(...g(d,'temperature_2m_min').filter(v=>v!=null)),tmax=Math.max(...g(d,'temperature_2m_max').filter(v=>v!=null)),span=Math.max(1,tmax-tmin);
+ html+=`<div class="sub">7 Tage</div><div class="days">`;
+ d.time.forEach((t,i)=>{const lo=g(d,'temperature_2m_min')[i],hi=g(d,'temperature_2m_max')[i];if(lo==null&&hi==null)return;const ws=g(d,'wind_speed_10m_max')[i],gu=g(d,'wind_gusts_10m_max')[i];
+  html+=`<div class="day"><div class="dn">${i===0?'Heute':fmtT(t*1000,{weekday:'short',day:'2-digit',month:'2-digit'})}</div><div class="di" title="${esc(wtxt(g(d,'weather_code')[i]))}">${wico(g(d,'weather_code')[i])}</div><div><div class="rv"><span>${r0(lo)}°</span><span>${r0(hi)}°</span></div><div class="range"><i style="left:${(lo-tmin)/span*100}%;right:${(tmax-hi)/span*100}%"></i></div></div><div class="dp">${r1(g(d,'precipitation_sum')[i])} mm${g(d,'precipitation_probability_max')?.[i]!=null?'<br>'+r0(g(d,'precipitation_probability_max')[i])+' %':''}</div><div class="dw">${arrow(g(d,'wind_direction_10m_dominant')[i])} ${r0(ws)} km/h<br><span style="color:var(--muted)">Böen ${r0(gu)}</span></div></div>`});
+ html+=`</div>`;
+ if(p.marine)html+=marineBlock(p,st,h,i0);
+ html+=`<div class="links">${p.links.map(([l,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(l)} ↗</a>`).join('')}</div>`;
+ $('body-'+p.id).innerHTML=html;
+ $('body-'+p.id).querySelectorAll('.models button[data-m]').forEach(b=>b.onclick=()=>{if(b.disabled)return;st.model=b.dataset.m;renderCard(p)});
+}
+function chart(h,i0,g){
+ const n=Math.min(48,h.time.length-i0);if(n<2)return'';const W=600,Hh=150,pl=28,pr=8,pt=12,pb=22;
+ const T=[],P=[],X=i=>pl+(W-pl-pr)*i/(n-1);for(let i=0;i<n;i++){T.push(g(h,'temperature_2m')[i0+i]);P.push(g(h,'precipitation')[i0+i]||0)}
+ const tv=T.filter(v=>v!=null);if(!tv.length)return'<div class="err">Keine Modelldaten.</div>';let lo=Math.floor(Math.min(...tv))-1,hi=Math.ceil(Math.max(...tv))+1;const Y=v=>pt+(Hh-pt-pb)*(1-(v-lo)/(hi-lo));
+ const pmax=Math.max(2,...P),bw=(W-pl-pr)/n*.7;let s=`<svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none" role="img" aria-label="Temperatur und Niederschlag 48 Stunden">`;
+ for(let k=0;k<=3;k++){const v=lo+(hi-lo)*k/3,y=Y(v);s+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" stroke="#1d3b50" stroke-width="1"/><text x="${pl-4}" y="${y+3}" fill="#8fa9bb" font-size="10" text-anchor="end">${Math.round(v)}°</text>`}
+ P.forEach((v,i)=>{if(v>0){const bh=(Hh-pt-pb)*v/pmax;s+=`<rect x="${X(i)-bw/2}" y="${Hh-pb-bh}" width="${bw}" height="${bh}" fill="#6ca9ff" opacity=".55" rx="1"><title>${r1(v)} mm</title></rect>`}});
+ for(let i=0;i<n;i++){const t=h.time[i0+i]*1000,hr=+hh(t);if(hr===0)s+=`<line x1="${X(i)}" x2="${X(i)}" y1="${pt}" y2="${Hh-pb}" stroke="#2b4e65" stroke-dasharray="3 3"/><text x="${X(i)+3}" y="${Hh-6}" fill="#cfdde6" font-size="10">${fmtT(t,{weekday:'short'})}</text>`;else if(hr%6===0)s+=`<text x="${X(i)}" y="${Hh-6}" fill="#8fa9bb" font-size="9.5" text-anchor="middle">${hr}h</text>`}
+ let path='';T.forEach((v,i)=>{if(v!=null)path+=(path?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1)});
+ s+=`<path d="${path}" fill="none" stroke="#f4bd62" stroke-width="2.2" stroke-linejoin="round"/></svg>`;return s;
+}
+function marineBlock(p,st,h,i0){
+ const m=st.marine?.current;
+ let s=`<div class="sub">Wind &amp; Wasser · Wassersport</div><div class="marine"><div class="mtop">
+  <div class="datum"><span>Wellenhöhe</span><b>${m?r1(m.wave_height)+' m':'–'}</b></div>
+  <div class="datum"><span>Wellenperiode</span><b>${m?r1(m.wave_period)+' s':'–'}</b></div>
+  <div class="datum"><span>Wassertemperatur</span><b>${m&&m.sea_surface_temperature!=null?r1(m.sea_surface_temperature)+' °C':'–'}</b></div></div>`;
+ const cmp=st.data.models.filter(x=>x==='icon_seamless'||x==='dmi_seamless');
+ if(cmp.length){
+  s+=`<div class="wtable"><table><tr><th>Uhrzeit</th>`;const idx=[];for(let i=i0;i<Math.min(i0+36,h.time.length);i+=2)idx.push(i);
+  idx.forEach(i=>s+=`<td class="h">${hh(h.time[i]*1000)}</td>`);s+=`</tr>`;
+  for(const m of cmp){const lab=m==='dmi_seamless'?'DMI':'DWD';const ws=pick(h,'wind_speed_10m',m),wg=pick(h,'wind_gusts_10m',m),wd=pick(h,'wind_direction_10m',m);
+   s+=`<tr><th>${lab} Wind kn</th>${idx.map(i=>{const k=kn(ws[i]);return k==null?'<td class="h">–</td>':`<td style="background:${windColor(k)}" title="${bft(ws[i])} Bft">${Math.round(k)}</td>`}).join('')}</tr>`;
+   s+=`<tr><th>${lab} Böen kn</th>${idx.map(i=>{const k=kn(wg[i]);return k==null?'<td class="h">–</td>':`<td style="background:${windColor(k)};opacity:.8">${Math.round(k)}</td>`}).join('')}</tr>`;
+   s+=`<tr><th>${lab} Richtung</th>${idx.map(i=>`<td class="d" title="${dirName(wd[i])}">${arrow(wd[i])}</td>`).join('')}</tr>`}
+  s+=`</table></div>`;
+ }
+ return s+`</div>`;
+}
+
+// ---------- Warnungen ----------
+const SEV={minor:['Wetterwarnung','minor',1],moderate:['Markante Wetterwarnung','moderate',2],severe:['Unwetterwarnung','severe',3],extreme:['Extreme Unwetterwarnung','extreme',4],unknown:['Hinweis','minor',0]};
+const sevKey=s=>({minor:'minor',moderate:'moderate',severe:'severe',extreme:'extreme'})[String(s||'').toLowerCase()]||'unknown';
+const PROV={DWD:'DWD',MOWAS:'MoWaS (BBK)',KATWARN:'KATWARN',BIWAPP:'BIWAPP',LHP:'Hochwasser (LHP)',POLICE:'Polizei'};
+function wIcon(txt){txt=String(txt).toLowerCase();if(/gewitter/.test(txt))return'⛈️';if(/sturm|orkan|wind|böen/.test(txt))return'💨';if(/hochwasser|flut|pegel|sturmflut/.test(txt))return'🌊';if(/schnee|glätte|glatteis|frost|eis/.test(txt))return'❄️';if(/regen|niederschlag/.test(txt))return'🌧️';if(/nebel/.test(txt))return'🌫️';if(/hitze|uv/.test(txt))return'🌡️';if(/feuer|brand|rauch/.test(txt))return'🔥';return'⚠️'}
+async function loadWarnings(){
+ const all=[];let dwdOk=0,ninaOk=0;
+ await Promise.all(PLACES.map(async p=>{
+  try{const d=await getJSON(`https://api.brightsky.dev/alerts?lat=${p.lat}&lon=${p.lon}&tz=${encodeURIComponent(TZ)}`);dwdOk++;
+   (d.alerts||[]).forEach(a=>all.push({key:'dwd|'+(a.alert_id||a.id),src:'DWD',place:p,sev:sevKey(a.severity),title:a.headline_de||a.event_de,event:a.event_de,desc:a.description_de,instr:a.instruction_de,from:a.onset||a.effective,to:a.expires}));p._dwd=true}catch(e){p._dwd=false}
+  try{const d=await firstOk([`https://warnung.bund.de/api31/dashboard/${p.ars}.json`,`https://nina.api.proxy.bund.dev/api31/dashboard/${p.ars}.json`]);ninaOk++;
+   (Array.isArray(d)?d:[]).forEach(w=>{const pd=w.payload?.data||{};if(pd.msgType==='Cancel')return;const prov=String(pd.provider||'').toUpperCase();
+    if(prov==='DWD'&&p._dwd)return; // DWD kommt genauer pro Gemeinde über Bright Sky
+    all.push({key:'nina|'+w.id,id:w.id,src:PROV[prov]||prov||'NINA',place:p,sev:sevKey(pd.severity),title:w.i18nTitle?.de||pd.headline,from:w.sent||w.effective,nina:true})})}catch(e){}
+ }));
+ srcState('DWD-Warnungen',dwdOk>0);srcState('NINA/BBK',ninaOk>0);
+ // Zusammenführen (gleiche Warnung an mehreren Orten)
+ const map=new Map();for(const w of all){const k=w.src+'|'+w.title+'|'+(w.from||'');if(!map.has(k))map.set(k,{...w,places:[]});map.get(k).places.push(w.place)}
+ const list=[...map.values()].sort((a,b)=>SEV[b.sev][2]-SEV[a.sev][2]||String(a.from).localeCompare(String(b.from)));window.__activeWarnings=list;
+ PLACES.forEach(p=>{const n=list.filter(w=>w.places.includes(p)).length,el=$('cw-'+p.id);el.textContent=n?`⚠ ${n} Warnung${n>1?'en':''}`:'✓ Keine Warnung';el.classList.toggle('on',n>0)});
+ const pill=$('wpill');pill.classList.toggle('warn',list.length>0);
+ $('wpilltxt').textContent=(dwdOk||ninaOk)?(list.length?`${list.length} aktive Warnung${list.length>1?'en':''}`:'Keine Warnungen'):'Warnungen nicht erreichbar';
+ if(!dwdOk&&!ninaOk){$('wlist').innerHTML='<div class="err">Warndienste gerade nicht erreichbar. Bitte <a href="https://www.dwd.de/DE/wetter/warnungen_gemeinden/warnWetter_node.html" target="_blank" rel="noopener">DWD-Warnungen</a> direkt prüfen.</div>';return}
+ if(!list.length){$('wlist').innerHTML='<div class="okbox">✓ Derzeit keine amtlichen Warnungen für Großenbrode, Schwarzenau und Hemdingen.</div>';return}
+ const tf=x=>x?fmtT(new Date(x),{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+ $('wlist').innerHTML=list.map((w,i)=>`<div class="warn ${SEV[w.sev][1]}" data-i="${i}"><div class="whead"><div class="wico">${wIcon((w.event||'')+' '+w.title)}</div><div class="wtxt"><div class="wtitle">${esc(w.title)}</div><div class="wmeta">${esc(w.src)} · ${esc(w.places.map(p=>p.name).join(', '))}${w.from?' · ab '+tf(w.from):''}${w.to?' bis '+tf(w.to):''}</div></div><div class="wplaces">${w.places.map(p=>`<span class="tag">${esc(p.name)}</span>`).join('')}<span class="sev ${SEV[w.sev][1]}">${SEV[w.sev][0]}</span></div></div><div class="wbody">${w.desc?esc(w.desc):'<span style="color:var(--muted)">Details werden geladen …</span>'}${w.instr?'\n\n<b>Handlungsempfehlung:</b> '+esc(w.instr):''}</div></div>`).join('');
+ $('wlist').querySelectorAll('.warn').forEach(el=>el.querySelector('.whead').onclick=async()=>{el.classList.toggle('open');const w=list[+el.dataset.i];
+  if(w.nina&&!w.loaded){w.loaded=true;try{const d=await firstOk([`https://warnung.bund.de/api31/warnings/${encodeURIComponent(w.id)}.json`,`https://nina.api.proxy.bund.dev/api31/warnings/${encodeURIComponent(w.id)}.json`]);const inf=(d.info||[]).find(x=>/^de/i.test(x.language||'de'))||d.info?.[0]||{};
+   el.querySelector('.wbody').innerHTML=esc(inf.description||'Keine weiteren Details.')+(inf.instruction?'\n\n<b>Handlungsempfehlung:</b> '+esc(inf.instruction):'')+(inf.expires?'\n\n<b>Gültig bis:</b> '+tf(inf.expires):'')}catch(e){el.querySelector('.wbody').innerHTML='Details nicht abrufbar.'}}});
+}
+
+// ---------- Wassersport-Check Großenbroder Fähre ----------
+// Faustregeln (Wind in Knoten, Wellen in m). Eigene Einschätzung – bitte vor Ort immer selbst prüfen.
+const SPORT={wind:{lat:54.39,lon:11.10},marine:[{lat:54.39,lon:11.12},{lat:54.37,lon:11.14}]};
+// Windsurf-Spots: Sektoren = Windrichtung, AUS der der Wind kommt (Grad). good = passt gut, ok = geht / nur Könner.
+const SPOTS=[
+ {name:'Großenbrode West / Binnensee',lvl:'Einsteiger–Fortgeschritten',good:[[200,320]],ok:[[60,110]],info:'Flachwasser hinter der Mole, bei W–NW teils abgedeckt. Bei Ost geteilt mit Kitern/Wingern. Nördlicher Einstieg steinig.',wf:'https://www.windfinder.com/forecast/grossenbrode_westufer'},
+ {name:'Großenbrode Ostsee / Südstrand',lvl:'Fortgeschritten–Könner',good:[[55,100]],ok:[[100,150],[260,320]],info:'Ideal Ostnordost (Welle, Bump & Jump). W–NW ablandig: Speed/Freestyle, aber offene See in Lee – nur Könner. Buhnen am Einstieg.',wf:'https://www.windfinder.com/forecast/grossenbrode'},
+ {name:'Großenbroder Fähre / Fehmarnsund',lvl:'Fortgeschritten',good:[[245,295],[65,115]],ok:[[215,245],[295,320],[40,65],[115,140]],info:'Der Sund wirkt wie eine Düse: West- und Ostwind kommen seitlich und werden verstärkt. Starke Strömung, Fahrrinne und Brücke beachten.',wf:'https://www.windfinder.com/forecast/grossenbroder_faehre'},
+ {name:'Fehmarn / Gold',lvl:'Einsteiger–Aufsteiger',good:[[180,360],[0,30]],ok:[[150,180],[30,45]],info:'Großes Stehrevier mit Flachwasser, ideal zum Lernen – funktioniert bei allen Richtungen außer östlichen Winden. Vereinzelt Steine.',wf:'https://www.windfinder.com/forecast/gold'},
+ {name:'Heiligenhafen / Steinwarder',lvl:'Aufsteiger–Könner',good:[[260,330]],ok:[[240,260],[330,350]],info:'Bei W–NW moderate Wellen über Sandbänken – gut für erste Sprünge. Vorne am Westende Steine.',wf:'https://www.windfinder.com/forecast/heiligenhafen_steinwarder_strand'},
+ {name:'Heiligenhafen / Binnensee',lvl:'Einsteiger',good:[[40,100]],ok:[[100,140],[250,320]],info:'Flachwasser mit großem Stehbereich Richtung Hafen. Bei Ost–Nordost am besten, bei West–Nordwest böig.',wf:'https://www.windfinder.com/forecast/wassersportcenter_heiligenhafen_schleswig-holstein_germany'},
+ {name:'Fehmarn / Wulfener Hals',lvl:'Alle',good:[[0,360]],ok:[],info:'Landzunge mit Stehrevier – funktioniert bei fast jeder Windrichtung. Gute Ausweichoption.'}
+];
+const inSec=(d,secs)=>secs.some(([a,b])=>a<=b?d>=a&&d<=b:d>=a||d<=b);
+const lerp=(x,pts)=>{if(x<=pts[0][0])return pts[0][1];for(let i=1;i<pts.length;i++)if(x<=pts[i][0]){const[a,va]=pts[i-1],[b,vb]=pts[i];return va+(vb-va)*(x-a)/(b-a)}return pts[pts.length-1][1]};
+const clamp=v=>Math.max(0,Math.min(100,v));
+const STORM=c=>c>=95,HEAVY=c=>[65,67,75,82,86].includes(c);
+function scoreSki(w,g,wave,code){if(STORM(code))return 0;let s=lerp(w,[[0,100],[5,95],[8,70],[11,35],[14,5],[16,0]]);s-=lerp(wave??0,[[0,0],[.2,0],[.35,25],[.5,60],[.7,100]]);if(g>16)s-=25;if(HEAVY(code))s-=25;return clamp(s)}
+function scoreSail(w,g,wave,code){if(STORM(code))return 0;let s=lerp(w,[[0,0],[4,10],[7,55],[10,95],[16,100],[18,85],[21,60],[25,30],[30,0]]);if(g>27)s-=30;if(g>33)s=0;if((wave??0)>1.2)s-=30;if(HEAVY(code))s-=20;return clamp(s)}
+function scoreSurf(w,g,wave,code){if(STORM(code))return 0;let s=lerp(w,[[0,0],[9,0],[12,35],[15,75],[17,100],[27,100],[32,75],[38,30],[45,0]]);if(HEAVY(code))s-=15;return clamp(s)}
+function scoreJet(w,g,wave,code){if(STORM(code))return 0;let s=lerp(w,[[0,100],[10,92],[14,65],[18,35],[22,10],[25,0]]);s-=lerp(wave??0,[[0,0],[.6,0],[.9,30],[1.2,70],[1.5,100]]);if(g>25)s-=25;if(HEAVY(code))s-=20;return clamp(s)}
+const ACTS=[{k:'sail',ico:'⛵',name:'Segeln',sub:'ab Marina Großenbroder Fähre',fn:scoreSail},{k:'surf',ico:'🏄',name:'Windsurfen',sub:'bester Spot siehe unten',fn:scoreSurf},{k:'ski',ico:'🎿',name:'Wasserski',sub:'Großenbroder Fähre am Sund',fn:scoreSki},{k:'jet',ico:'🚤',name:'Jetski',sub:'im Sund / Lübecker Bucht',fn:scoreJet}];
+const ACOL={sail:'#6ca9ff',surf:'#39d6a0',ski:'#f4d35e',jet:'#ff9a3c',pause:'#2b4e65'};
+const verdict=s=>s>=80?['Top','#39d6a0']:s>=60?['Gut','#9be36d']:s>=40?['Möglich','#f4d35e']:s>=20?['Mäßig','#ff9a3c']:['Nicht empfohlen','#ff5c66'];
+const sport={day:0,data:null};
+async function loadSport(){
+ const base=`https://api.open-meteo.com/v1/forecast?latitude=${SPORT.wind.lat}&longitude=${SPORT.wind.lon}&timezone=${encodeURIComponent(TZ)}&timeformat=unixtime&wind_speed_unit=kn&hourly=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,temperature_2m,precipitation&daily=sunrise,sunset&forecast_days=3`;
+ let fc=null,models=[];for(const t of [['icon_seamless','dmi_seamless'],['icon_seamless'],null]){try{fc=await getJSON(base+(t?'&models='+t.join(','):''));models=t||[null];break}catch(e){}}
+ if(!fc)throw new Error('Winddaten nicht erreichbar');
+ let wav=null,sst=null;for(const m of SPORT.marine){try{const d=await getJSON(`https://marine-api.open-meteo.com/v1/marine?latitude=${m.lat}&longitude=${m.lon}&timezone=${encodeURIComponent(TZ)}&timeformat=unixtime&hourly=wave_height,sea_surface_temperature&forecast_days=3`);if((d.hourly?.wave_height||[]).some(v=>v!=null)){wav=d.hourly;break}}catch(e){}}
+ // Mittelwert aus DWD ICON und DMI HARMONIE (wo vorhanden)
+ const h=fc.hourly,n=h.time.length,get=(k,m)=>m?h[k+'_'+m]:h[k];const ms=models.filter(m=>(get('wind_speed_10m',m)||[]).some(v=>v!=null));
+ const hours=[];for(let i=0;i<n;i++){const ws=ms.map(m=>get('wind_speed_10m',m)?.[i]).filter(v=>v!=null),gs=ms.map(m=>get('wind_gusts_10m',m)?.[i]).filter(v=>v!=null),ds=ms.map(m=>get('wind_direction_10m',m)?.[i]).filter(v=>v!=null);
+  if(!ws.length)continue;const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  const dir=(Math.atan2(avg(ds.map(d=>Math.sin(d*Math.PI/180))),avg(ds.map(d=>Math.cos(d*Math.PI/180))))*180/Math.PI+360)%360;
+  const wi=wav?wav.time.indexOf(h.time[i]):-1;
+  hours.push({t:h.time[i],w:avg(ws),g:gs.length?Math.max(...gs):avg(ws)*1.4,d:dir,spread:ws.length>1?Math.abs(ws[0]-ws[1]):0,code:get('weather_code',ms[0])?.[i]??0,temp:get('temperature_2m',ms[0])?.[i],wave:wi>=0?wav.wave_height[wi]:null,sst:wi>=0?wav.sea_surface_temperature?.[wi]:null})}
+ // Bei mehreren Modellen heißen die Tageswerte z. B. "sunrise_icon_seamless" – auf einheitliche Namen bringen
+ const dl=fc.daily||{},dk=k=>dl[k]||Object.entries(dl).find(([key,v])=>key.startsWith(k+'_')&&Array.isArray(v)&&v.some(x=>x!=null))?.[1];
+ let sunrise=dk('sunrise'),sunset=dk('sunset');
+ if(!sunrise||!sunset){const d0=new Date();d0.setHours(0,0,0,0);const b=d0.getTime()/1000;sunrise=[0,1,2].map(i=>b+i*86400+7*3600);sunset=[0,1,2].map(i=>b+i*86400+17*3600)} // Notfall: 7–17 Uhr
+ sport.data={hours,daily:{sunrise,sunset},models:ms};
+ srcState('Wassersport-Check',true);
+}
+function bestWindow(hs,key,len=3){let best={s:-1,i:0};for(let i=0;i+len<=hs.length;i++){const s=hs.slice(i,i+len).reduce((a,h)=>a+h[key],0)/len;if(s>best.s)best={s,i}}return best.s<0?null:{s:best.s,from:hs[best.i].t,to:hs[Math.min(best.i+len,hs.length)-1].t+3600,hrs:hs.slice(best.i,best.i+len)}}
+function compass(spot,dir){const R=26,c=30,arc=(a,b,col,op)=>{const p=x=>[c+R*Math.sin(x*Math.PI/180),c-R*Math.cos(x*Math.PI/180)];if(b<a)b+=360;if(b-a>=359.9)return`<circle cx="${c}" cy="${c}" r="${R}" fill="${col}" opacity="${op}"/>`;const[x1,y1]=p(a),[x2,y2]=p(b);return`<path d="M${c},${c} L${x1},${y1} A${R},${R} 0 ${b-a>180?1:0} 1 ${x2},${y2}Z" fill="${col}" opacity="${op}"/>`};
+ let s=`<svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true"><circle cx="${c}" cy="${c}" r="${R}" fill="#132c3d" stroke="#2b4e65"/>`;spot.ok.forEach(([a,b])=>s+=arc(a,b,'#f4d35e',.55));spot.good.forEach(([a,b])=>s+=arc(a,b,'#39d6a0',.75));
+ s+=`<text x="${c}" y="9" fill="#cfdde6" font-size="7" text-anchor="middle">N</text>`;
+ if(dir!=null){const x=c+R*Math.sin(dir*Math.PI/180),y=c-R*Math.cos(dir*Math.PI/180);s+=`<line x1="${x}" y1="${y}" x2="${c}" y2="${c}" stroke="#fff" stroke-width="2.4"/><circle cx="${x}" cy="${y}" r="3" fill="#fff"/>`}
+ return s+`</svg>`}
+function renderSport(){try{renderSportInner()}catch(e){console.error(e);$('sportbody').innerHTML=`<div class="err">Wassersport-Check konnte nicht berechnet werden (${esc(e.message)}).</div>`}}
+function renderSportInner(){
+ const el=$('sportbody');if(!sport.data){return}
+ const {hours,daily}=sport.data,now=Date.now()/1000,di=sport.day;
+ const sr=daily.sunrise[di],ss=daily.sunset[di];
+ let hs=hours.filter(h=>h.t>=sr-1800&&h.t<=ss-1800&&(di>0||h.t>=now-3600));
+ const dayName=['Heute','Morgen','Übermorgen'][di];
+ if(!hs.length){el.innerHTML=`<div class="err">${di===0?'Für heute ist es schon dunkel – schau auf „Morgen“.':'Keine Daten für diesen Tag.'}</div>`;return}
+ hs.forEach(h=>{for(const a of ACTS)h[a.k]=a.fn(h.w,h.g,h.wave,h.code)});
+ const res=ACTS.map(a=>({...a,win:bestWindow(hs,a.k,Math.min(3,hs.length))}));
+ res.forEach(r=>r.score=r.win?.s??0);
+ // Hauptempfehlung: höchste Punktzahl; bei Flaute+Glattwasser Wasserski bevorzugen
+ const top=[...res].sort((a,b)=>b.score-a.score)[0];
+ const W=r=>r.win.hrs,avg=(a,k)=>a.reduce((x,h)=>x+(h[k]??0),0)/a.length;
+ const desc=r=>{const a=W(r),w=avg(a,'w'),g=Math.max(...a.map(h=>h.g)),wv=a.some(h=>h.wave!=null)?avg(a,'wave'):null,d=(Math.atan2(avg(a.map(h=>({s:Math.sin(h.d*Math.PI/180)})),'s'),avg(a.map(h=>({c:Math.cos(h.d*Math.PI/180)})),'c'))*180/Math.PI+360)%360;return{w,g,wv,d,txt:`${r0(w)} kn aus ${dirName(d)}, Böen bis ${r0(g)} kn${wv!=null?', Wellen ~'+r1(wv)+' m':''}`}};
+ const tw=w=>w?`${fmtT(w.from*1000,{hour:'2-digit',minute:'2-digit'})}–${fmtT(w.to*1000,{hour:'2-digit',minute:'2-digit'})}`:'–';
+ const warnGB=(window.__activeWarnings||[]).filter(w=>w.places.some(p=>p.id==='gb'));
+ const storm=hs.some(h=>STORM(h.code));
+ let html='';
+ if(warnGB.length)html+=`<div class="sbanner">⚠ Für Großenbrode gilt aktuell: <b>${esc(warnGB.map(w=>w.title).join(' · '))}</b> – Warnung oben beachten.</div>`;
+ if(storm)html+=`<div class="sbanner">⛈ ${dayName} sind Gewitter möglich – bei Gewitter sofort raus aus dem Wasser.</div>`;
+ const td=top.win?desc(top):null;
+ if(top.score<20)html+=`<div class="hero"><div class="hico">🛋️</div><div><div class="htitle">${dayName}: kein guter Wassersporttag</div><div class="hsub">Weder Wind noch Wasser passen richtig – eher ein Tag für Hafen, Strand oder Werkstatt.</div></div></div>`;
+ else html+=`<div class="hero"><div class="hico">${top.ico}</div><div><div class="htitle">${dayName}: am besten <span style="color:${verdict(top.score)[1]}">${top.name}</span></div><div class="hsub">Bestes Zeitfenster ${tw(top.win)} Uhr · ${td.txt}${hs[0].sst!=null?' · Wasser '+r1(hs[0].sst)+' °C':''}</div></div></div>`;
+ html+=`<div class="acts">`+res.map(r=>{const[v,col]=verdict(r.score),d=r.win?desc(r):null;
+  const why=r.k==='ski'?(d.w<=8&&(d.wv??0)<=.3?'Wenig Wind, glattes Wasser – ideal.':d.w>11?'Zu viel Wind – das Wasser wird kabbelig.':(d.wv??0)>.35?'Zu viel Welle für entspanntes Fahren.':'Grenzwertig, eher früh oder spät am Tag probieren.')
+  :r.k==='sail'?(d.w<5?'Kaum Wind – Flaute.':d.g>27?'Starke Böen – nur mit Reff und Erfahrung.':d.w>22?'Viel Wind – nur für erfahrene Crews.':d.w>=18?'Frischer Wind – Reff einplanen, eher für Erfahrene.':d.w>=9?'Schöner Segelwind.':'Leichtwind – gemütliches Segeln.')
+  :r.k==='jet'?(d.w>18?'Zu viel Wind – ruppig und anstrengend.':(d.wv??0)>.9?'Hohe Wellen – nur für Geübte.':(d.wv??0)>.4?'Etwas Welle – macht Spaß, aber festhalten.':'Ruhiges Wasser – entspannte Tour.')
+  :(d.w<12?'Zu wenig Wind zum Gleiten.':d.w<15?'Gleiten mit großem Segel/Board möglich.':d.w<=27?'Gleitwind – gute Bedingungen.':'Starkwind – kleines Segel, nur Könner.');
+  return`<div class="act"><div class="atop"><span class="aico">${r.ico}</span><div><b>${r.name}</b><small>${r.sub}</small></div><span class="vbadge" style="background:${col}">${v}</span></div><div class="bar"><i style="width:${r.score}%;background:${col}"></i></div><div class="adesc">${esc(why)}</div><div class="ameta">Beste Zeit: <b>${tw(r.win)}</b><br>${d?esc(d.txt):''}</div></div>`}).join('')+`</div>`;
+ html+=dayPlan(hs,dayName);
+ // Windsurf-Spots
+ const sw=res.find(r=>r.k==='surf'),sd=sw.win?desc(sw):null,dir=sd?.d,wkn=sd?.w??0;
+ const ranked=SPOTS.map(s=>{const allDir=s.good.some(([a,b])=>b-a>=359);const fit=dir==null?0:inSec(dir,s.good)?(allDir?.9:1):inSec(dir,s.ok)?.55:0;return{...s,fit,score:fit*sw.score}}).sort((a,b)=>b.score-a.score||b.fit-a.fit);
+ html+=`<div class="sub" style="margin:10px -16px 0;padding-left:16px">Windsurf-Spots bei ${dir==null?'–':dirName(dir)+'-Wind ('+r0(dir)+'°)'}, ~${r0(wkn)} kn ${sw.score<20?'· '+dayName.toLowerCase()+' zu wenig Wind zum Gleiten':''}</div><div class="spots">`;
+ ranked.forEach((s,i)=>{const lab=s.fit>=.9?['passt','#39d6a0']:s.fit>0?['geht','#f4d35e']:['passt nicht','#ff5c66'];
+  html+=`<div class="spot ${i===0&&s.fit>0&&sw.score>=20?'best':''}">${compass(s,dir)}<div class="stxt"><div class="sname">${i===0&&s.fit>0&&sw.score>=20?'🏆 ':''}${esc(s.name)} <span class="fit" style="color:${lab[1]}">● ${lab[0]}</span></div><div class="slvl">${esc(s.lvl)}</div><div class="sinfo">${esc(s.info)}</div></div>${s.wf?`<a class="swf" href="${s.wf}" target="_blank" rel="noopener">Windfinder ↗</a>`:''}</div>`});
+ html+=`</div><div class="snote">Grün = Windrichtung passt gut, gelb = geht bzw. nur für Könner, weißer Punkt = erwartete Windrichtung. Wind = Mittel aus DWD ICON und DMI HARMONIE${sport.data.models.length<2?' (nur ein Modell verfügbar)':''}. Faustregeln: Wasserski bis ca. 8 kn und unter 0,3 m Welle, Segeln ab ca. 7 kn (ideal 10–18), Windsurfen ab ca. 12–15 kn. Wasserski nur in ausgewiesenen Bereichen, im Sund auf Strömung und Fahrrinne achten. Immer vor Ort selbst einschätzen.</div>`;
+ el.innerHTML=html;
+}
+
+// Tagesplan: seltene Bedingungen zuerst einplanen (Knappheitsprinzip), Rest mit der jeweils besten Aktivität füllen.
+function actWhy(k,w,g,wv){wv=wv??0;
+ if(k==='ski')return w<=8&&wv<=.3?'Kaum Wind, glattes Wasser – ideal für Wasserski.':'Noch ruhig genug für Wasserski.';
+ if(k==='jet')return wv>.4?'Etwas Welle – sportliche Jetski-Runde.':'Ruhiges Wasser – entspannte Jetski-Tour.';
+ if(k==='sail')return g>27?'Kräftige Böen – nur mit Reff.':w>=18?'Frischer Segelwind – Reff einplanen.':w>=9?'Schöner Segelwind.':'Leichtwind – gemütliches Segeln.';
+ if(k==='surf')return w>27?'Starkwind – kleines Segel, nur Könner.':w>=15?'Gleitwind – beste Windsurf-Zeit.':'Gleiten mit großem Segel möglich.';return''}
+function dayPlan(hs,dayName){
+ const GOOD=60,OK=40,n=hs.length,slot=new Array(n).fill(null),order=[];
+ const goodCount=a=>hs.filter(h=>h[a.k]>=GOOD).length;
+ const cand=ACTS.filter(a=>hs.some(h=>h[a.k]>=OK)).sort((a,b)=>{const ga=goodCount(a),gb=goodCount(b);return (ga||99)-(gb||99)||Math.max(...hs.map(h=>h[b.k]))-Math.max(...hs.map(h=>h[a.k]))});
+ for(const a of cand){let best=null;
+  for(const L of [3,2,1]){for(let i=0;i+L<=n;i++){if(slot.slice(i,i+L).some(x=>x))continue;const sc=hs.slice(i,i+L).map(h=>h[a.k]);if(Math.min(...sc)<OK)continue;const av=sc.reduce((x,y)=>x+y,0)/L;if(!best||av>best.av)best={i,L,av}}if(best)break}
+  if(best){for(let i=best.i;i<best.i+best.L;i++)slot[i]=a.k;order.push(a.k)}}
+ // Lücken füllen: beste Aktivität der Stunde, wenn mindestens "möglich"
+ for(let i=0;i<n;i++)if(!slot[i]){const b=ACTS.map(a=>[a.k,hs[i][a.k]]).sort((x,y)=>y[1]-x[1])[0];slot[i]=b[1]>=OK?b[0]:'pause'}
+ // Blöcke bilden
+ const blocks=[];slot.forEach((k,i)=>{const l=blocks[blocks.length-1];if(l&&l.k===k)l.to=i;else blocks.push({k,from:i,to:i})});
+ const A=k=>ACTS.find(a=>a.k===k);const prio=k=>{const i=order.indexOf(k);return i<0?null:i+1};
+ const ht=i=>fmtT(hs[i].t*1000,{hour:'2-digit',minute:'2-digit'}),hend=i=>fmtT((hs[i].t+3600)*1000,{hour:'2-digit',minute:'2-digit'});
+ let s=`<div class="sub" style="margin:12px -16px 0;padding-left:16px">🗓️ Optimaler Tagesplan · ${dayName}</div>`;
+ s+=`<div class="tl">${hs.map((h,i)=>{const k=slot[i],a=A(k);return`<div class="tlh" title="${a?a.name:'Pause'} · ${r0(h.w)} kn ${dirName(h.d)}"><div class="tlc" style="background:${ACOL[k]}${k==='pause'?'':'cc'}">${a?a.ico:'☕'}</div><div class="tlt">${hh(h.t*1000)}</div><div class="tlw">${arrow(h.d)}${r0(h.w)}</div></div>`}).join('')}</div>`;
+ s+=`<div class="plan">`;
+ blocks.forEach(b=>{const a=A(b.k),seg=hs.slice(b.from,b.to+1),w=seg.reduce((x,h)=>x+h.w,0)/seg.length,g=Math.max(...seg.map(h=>h.g)),wv=seg.some(h=>h.wave!=null)?seg.reduce((x,h)=>x+(h.wave??0),0)/seg.length:null,p=prio(b.k);
+  let why='';if(a){const gc=goodCount(a);why=actWhy(b.k,w,g,wv)+(p===1&&gc&&gc<=4?` Nur ${gc} Std. gute Bedingungen – deshalb zuerst einplanen.`:p===1?' Dafür passt es heute am besten.':'')}
+  else why=w<4?'Kaum Wind und keine Aktivität passt gut – Pause, Material wechseln oder Hafen.':'Bedingungen passen für keine Aktivität richtig – Pause einlegen.';
+  s+=`<div class="pblock" style="border-left-color:${ACOL[b.k]}"><div class="ptime">${ht(b.from)}–${hend(b.to)}</div><div class="pico">${a?a.ico:'☕'}</div><div class="ptxt"><b>${a?a.name:'Pause'}</b>${p?`<span class="prio">Prio ${p}</span>`:''}<div class="pwhy">${esc(why)}</div><div class="pdat">${r0(w)} kn ${dirName(seg[0].d)}, Böen ${r0(g)} kn${wv!=null?', Welle ~'+r1(wv)+' m':''}</div></div></div>`});
+ s+=`</div>`;
+ const pr=order.map(k=>A(k).ico+' '+A(k).name);
+ s+=`<div class="snote">${pr.length?'<b>Prioritäten für '+dayName.toLowerCase()+':</b> '+pr.map((x,i)=>(i+1)+'. '+x).join(' → ')+'. ':''}Logik: Was an diesem Tag nur kurz möglich ist (meist Windsurfen bei Gleitwind oder Wasserski bei Glattwasser), bekommt zuerst sein bestes Zeitfenster. Danach werden die übrigen Stunden mit der jeweils am besten passenden Aktivität gefüllt. Ändert sich die Vorhersage, wird der Plan bei jeder Aktualisierung (alle 10 Min.) neu berechnet. Jetski nur in freigegebenen Bereichen und mit passendem Bootsführerschein.</div>`;
+ return s;
+}
+async function refreshSport(){try{await loadSport();renderSport()}catch(e){srcState('Wassersport-Check',false);$('sportbody').innerHTML=`<div class="err">Wassersport-Daten nicht erreichbar (${esc(e.message)}).</div>`}}
+document.querySelectorAll('#sporttabs button').forEach(b=>b.onclick=()=>{sport.day=+b.dataset.d;document.querySelectorAll('#sporttabs button').forEach(x=>x.classList.toggle('on',x===b));renderSport()});
+
+// ---------- Hochwasser & Wasserstände (PEGELONLINE, WSV) ----------
+const PO='https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations/';
+const GAUGES={
+ gb:{type:'ostsee',note:'Ostsee-Pegel nahe Großenbrode',list:['HEILIGENHAFEN','MARIENLEUCHTE'],links:[['Hochwasser-Sturmflut-Info SH','https://www.schleswig-holstein.de/hsi'],['BSH Wasserstand','https://www.bsh.de/']]},
+ sw:{type:'fluss',note:'Eder – nächster Bundespegel liegt ca. 35 km flussabwärts in Hessen',list:['SCHMITTLOTHEIM'],links:[['Hochwasserportal NRW','https://www.hochwasserportal.nrw.de/']]},
+ hd:{type:'tide',note:'Tidegewässer Krückau und Pinnau in der Nähe',list:['ELMSHORN HAFEN','UETERSEN'],links:[['Hochwasser-Sturmflut-Info SH','https://www.schleswig-holstein.de/hsi']]}
+};
+function surgeClass(m){ // Ostsee, Wasserstand in m über NHN
+ if(m>=2)return['Sehr schwere Sturmflut','#c070ff'];if(m>=1.5)return['Schwere Sturmflut','#ff5c66'];if(m>=1.25)return['Mittlere Sturmflut','#ff9a3c'];if(m>=1)return['Leichte Sturmflut','#f4d35e'];
+ if(m>=.5)return['Erhöhter Wasserstand','#9be36d'];if(m<=-1)return['Sehr niedriger Wasserstand','#ff9a3c'];if(m<=-.5)return['Niedriger Wasserstand','#f4d35e'];return['Normal','#39d6a0']}
+const STATE={low:['Niedrig (unter MNW)','#f4d35e'],normal:['Normal','#39d6a0'],high:['Hoch (über MHW)','#ff9a3c'],unknown:['Keine Einstufung','#8fa9bb']};
+function spark(vals,col){if(vals.length<2)return'';const W=160,H=34,mn=Math.min(...vals),mx=Math.max(...vals),r=mx-mn||1;const pts=vals.map((v,i)=>`${(i/(vals.length-1)*W).toFixed(1)},${(H-2-(v-mn)/r*(H-4)).toFixed(1)}`).join(' ');return`<svg width="100%" height="${H}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.8"/></svg>`}
+async function loadGauge(name){
+ const st=await getJSON(PO+encodeURIComponent(name)+'.json?includeTimeseries=true&includeCurrentMeasurement=true');
+ const ts=(st.timeseries||[]).find(t=>t.shortname==='W');if(!ts?.currentMeasurement)throw new Error('kein Wasserstand');
+ let hist=[];try{hist=await getJSON(PO+encodeURIComponent(name)+'/W/measurements.json?start=P1D')}catch(e){}
+ return {st,ts,hist};
+}
+async function loadFlood(){
+ let ok=0;
+ await Promise.all(PLACES.map(async p=>{const G=GAUGES[p.id],box=$('fl-'+p.id);
+  const res=await Promise.all(G.list.map(n=>loadGauge(n).then(r=>({n,r})).catch(()=>({n,r:null}))));
+  let html='';
+  for(const {n,r} of res){
+   if(!r){html+=`<div class="gauge"><div class="gname">${esc(n)}</div><div class="err" style="padding:4px 0">Keine Daten</div></div>`;continue}ok++;
+   const {st,ts,hist}=r,cm=ts.currentMeasurement,v=cm.value,zero=ts.gaugeZero;
+   const vals=(hist||[]).map(x=>x.value).filter(x=>x!=null);
+   const old=hist?.length?hist.filter(x=>new Date(x.timestamp)<=new Date(Date.now()-3*3600e3)).pop():null;
+   const diff=old?v-old.value:null,trend=diff==null?'':Math.abs(diff)<3?'→ gleichbleibend':diff>0?`↗ steigend (+${r0(diff)} cm in 3 h)`:`↘ fallend (${r0(diff)} cm in 3 h)`;
+   let lvl,cls;
+   if(G.type==='ostsee'&&zero&&/NHN/i.test(zero.unit||'')){const m=v/100+zero.value;cls=surgeClass(m);lvl=`${m>=0?'+':''}${r0(m*100)} cm <small>${m>=0?'über':'unter'} NHN (≈ Mittelwasser)</small>`}
+   else{cls=STATE[cm.stateMnwMhw]||STATE.unknown;lvl=`${r0(v)} cm <small>am Pegel</small>`}
+   html+=`<div class="gauge" style="border-left-color:${cls[1]}"><div class="gtop"><div><div class="gname">${esc(st.longname||n)}</div><div class="gwater">${esc(st.water?.longname||'')}${st.km!=null?' · km '+r1(st.km):''}</div></div><span class="gbadge" style="background:${cls[1]}">${cls[0]}</span></div>
+    <div class="glvl">${lvl}</div><div class="gtrend">${trend} · ${fmtT(new Date(cm.timestamp),{hour:'2-digit',minute:'2-digit'})} Uhr</div>${spark(vals,cls[1])}<div class="gfoot">Letzte 24 h · <a href="https://www.pegelonline.wsv.de/gast/start" target="_blank" rel="noopener">PEGELONLINE ↗</a></div></div>`;
+  }
+  box.innerHTML=`<div class="fhead"><b>${esc(p.name)}</b><small>${esc(G.note)}</small></div><div class="gauges">${html}</div><div class="links" style="padding:6px 0 0">${G.links.map(([l,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(l)} ↗</a>`).join('')}</div>`;
+ }));
+ srcState('Pegel (PEGELONLINE)',ok>0);
+}
+
+// ---------- Ablauf ----------
+async function loadPlace(p){
+ try{
+  const [data,station,marine]=await Promise.all([loadForecast(p),loadStation(p).catch(()=>null),p.marine?loadMarine(p).catch(()=>null):null]);
+  const prev=state[p.id]?.model;state[p.id]={data,station,marine,model:data.models.includes(prev)?prev:data.models[0]};
+  srcState('Vorhersage (Open-Meteo)',true);if(station)srcState('DWD-Stationen',true);if(data.models.includes('dmi_seamless'))srcState('DMI HARMONIE',true);
+  renderCard(p);
+ }catch(e){srcState('Vorhersage (Open-Meteo)',false);$('body-'+p.id).innerHTML=`<div class="err">Wetterdaten konnten nicht geladen werden (${esc(e.message)}). Nächster Versuch in 10 Minuten.</div>`}
+}
+async function refresh(){$('refresh').disabled=true;await Promise.all([loadWarnings(),loadFlood().catch(()=>srcState('Pegel (PEGELONLINE)',false)),refreshSport(),...PLACES.map(loadPlace)]);renderSport();$('updated').textContent='Stand '+fmtT(new Date(),{hour:'2-digit',minute:'2-digit'})+' Uhr';$('refresh').disabled=false}
+$('refresh').onclick=refresh;refresh();setInterval(refresh,10*60*1000);
+})();
+</script>
+</body>
+</html>
